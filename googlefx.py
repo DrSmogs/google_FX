@@ -40,10 +40,9 @@ def webhook():
 def processRequest(req):
     if req.get("result").get("action") == "trending":
 
-        baseurl = trendingurl
-        fullurl = baseurl + '?rid=TRENDING1&limit=1&BLOCKED=YES&utcOffset=%2B1100&offset=0&prod=FOXTELIQ3'
+        queryurl = disco.disco_url('trending','1')
 
-        result = urllib.request.urlopen(fullurl).read()
+        result = urllib.request.urlopen(queryurl).read()
         data = json.loads(result)
         res = makeWebhookResult(data)
         return res

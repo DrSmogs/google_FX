@@ -2,15 +2,7 @@
 
 #This is to hold functions for content disco to clean the main app nice and clean
 
-from __future__ import print_function
-#from future import standard_library
-#standard_library.install_aliases()
-import urllib.request, urllib.parse, urllib.error
-import json
-import os
-
-
-def disco_url(searchtype, rid=None, fx=None, sfx=None, mlt=None):
+def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     #build the content disco url
     url_params = {}
 
@@ -92,6 +84,10 @@ def disco_url(searchtype, rid=None, fx=None, sfx=None, mlt=None):
 
     #url_params['fp']="" #no idea what this does
     #Specifies the fields of the result to be returned this specifies the exa
+
+    if limit is not None:
+        url_params['limit']=limit
+    #Limits the number of results
 
     if fx is not None:
         url_params['fx']=fx
