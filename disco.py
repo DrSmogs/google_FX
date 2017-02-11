@@ -2,6 +2,8 @@
 
 #This is to hold functions for content disco to clean the main app nice and clean
 
+import urllib
+
 def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     #build the content disco url
     url_params = {}
@@ -176,4 +178,4 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
 
     url=baseurl + urllib.urlencode(url_params)
 
-    print(url)
+    return url
