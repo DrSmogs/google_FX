@@ -13,34 +13,13 @@ from flask import make_response
 
 from OpenSSL import SSL
 
+import disco #functions for Content Discovery
+
 # Flask app should start in global layout
 app = Flask(__name__)
 
 #setup a few deaults for using the Content Disco API
 
-trendingurl = 'https://foxtel-prod-elb.digitalsmiths.net/sd/foxtel/taps/assets/popularity/trending'
-trendingrid = 'TRENDING1'
-trendinglimit= '1'
-trendingBLOCKED = 'YES'
-utcOfsett = '%2B1100'
-offsett = '0'
-prod = 'FOXTELIQ3'
-
-# class ContDisco:
-#     baseurl = 'https://foxtel-prod-elb.digitalsmiths.net/sd/foxtel/'
-#     ymal = 'taps/assets/ymal'
-#     popular = 'taps/assets/popularity/popular'
-#     related = 'taps/assets/metadata/related'
-#     idemdetails = 'taps/assets/metadata/itemDetails'
-#     channel='taps/assets/metadata/channel'
-#     detailslist='taps/assets/metadata/detailList'
-#     image='taps/assets/metadata/images'
-#     trending='taps/assets/popularity/trending'
-#     suggested='taps/assets/personalised/suggested'
-#     autosuggest='taps/assets/search/autosugges'
-#     keyword='taps/assets/search/keyword'
-#     fullsearch='taps/assets/search/prefix'
-#     events='implicitEvents'
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -73,15 +52,6 @@ def processRequest(req):
         return {}
 
 
-
-# def makeYqlQuery(req):
-#     result = req.get("result")
-#     parameters = result.get("parameters")
-#     city = parameters.get("geo-city")
-#     if city is None:
-#         return None
-#
-#     return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
 
 
 def makeWebhookResult(data):
