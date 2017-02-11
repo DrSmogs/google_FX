@@ -32,7 +32,7 @@ def webhook():
 
 
 def processRequest(req):
-    if req.get("result").get("action") = "foxteltest":
+    if req.get("result").get("action") == "foxteltest":
 
         # baseurl = "https://query.yahooapis.com/v1/public/yql?"
         # yql_query = makeYqlQuery(req)
@@ -83,7 +83,7 @@ def FoxtelTest():
     #
     # # print(json.dumps(item, indent=4))
 
-    speech = "The test is working. I can read this text out - hooray.")
+    speech = "The test is working. I can read this text out - hooray."
 
     print("Response:")
     print(speech)
