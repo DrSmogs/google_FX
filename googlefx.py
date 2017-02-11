@@ -47,6 +47,16 @@ def processRequest(req):
         res = makeWebhookResult(data)
         return res
 
+    if req.get("result").get("action") == "trendin_list":
+
+        limit = req.get("result").get("parameters").get("limit")
+        queryurl = disco.disco_url('trending',limit)
+
+        result = urllib.request.urlopen(queryurl).read()
+        data = json.loads(result)
+        res = makeWebhookResult2(data)
+        return res
+
     else:
         return {}
 
@@ -60,8 +70,6 @@ def makeWebhookResult(data):
 
     title = hits[0]['metadata']['title']
     description= hits[0]['metadata']['description']
-
-
 
     # print(json.dumps(item, indent=4))
 
@@ -78,6 +86,29 @@ def makeWebhookResult(data):
         "source": "apiai-weather-webhook-sample"
     }
 
+
+def makeWebhookResult2(data):
+    hits = data.get('hits')
+    if hits is None:
+        return {}
+
+    speech = "The hot shows are "
+
+    for each show in hits:
+
+        speech = speech + hits['metadata']['title']
+
+
+    print("Response:")
+    print(speech)
+
+    return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "source": "apiai-weather-webhook-sample"
+    }
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
