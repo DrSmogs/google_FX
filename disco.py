@@ -182,7 +182,7 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
 
     return url
 
-def disco_resp(action, data)
+def disco_resp(action, data):
 
     #build the results need for the web query - returns speech and display text (more later) as a dictionary
     #uses the action to determine how to process results
