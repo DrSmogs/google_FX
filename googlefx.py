@@ -93,8 +93,8 @@ def makeWebhookResult2(data):
     hits = data.get('hits')
     if hits is None:
         return {}
-
-    speech = "The " + limit + "hottest shows are "
+   
+    speech = "The hottest shows are "
 
     for show in hits:
 
