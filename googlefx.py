@@ -89,10 +89,8 @@ def makeWebhookResult(data):
     if hits is None:
         return {}
 
-    for item in hits:
-        for data_item in item['metadata']:
-            title = data_item['title']
-            description= data_item['desciption']
+    title = hits[0]['metadata']['title']
+    description= hits[0]['metadata']['description']
 
 
 
