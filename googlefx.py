@@ -16,6 +16,31 @@ from OpenSSL import SSL
 # Flask app should start in global layout
 app = Flask(__name__)
 
+#setup a few deaults for using the Content Disco API
+
+trendingurl = 'https://foxtel-prod-elb.digitalsmiths.net/sd/foxtel/taps/assets/popularity/trending'
+trendingrid = 'TRENDING1'
+trendinglimit= '1'
+trendingBLOCKED = 'YES'
+utcOfsett = '%2B1100'
+offsett = '0'
+prod = 'FOXTELIQ3'
+
+# class ContDisco:
+#     baseurl = 'https://foxtel-prod-elb.digitalsmiths.net/sd/foxtel/'
+#     ymal = 'taps/assets/ymal'
+#     popular = 'taps/assets/popularity/popular'
+#     related = 'taps/assets/metadata/related'
+#     idemdetails = 'taps/assets/metadata/itemDetails'
+#     channel='taps/assets/metadata/channel'
+#     detailslist='taps/assets/metadata/detailList'
+#     image='taps/assets/metadata/images'
+#     trending='taps/assets/popularity/trending'
+#     suggested='taps/assets/personalised/suggested'
+#     autosuggest='taps/assets/search/autosugges'
+#     keyword='taps/assets/search/keyword'
+#     fullsearch='taps/assets/search/prefix'
+#     events='implicitEvents'
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -34,57 +59,53 @@ def webhook():
 
 
 def processRequest(req):
-    if req.get("result").get("action") != "yahooWeatherForecast":
+    if req.get("result").get("action") == "trending":
+
+        baseurl = trendingurl
+        fullurl = baseurl + '?rid=TRENDING1&limit=1&BLOCKED=YES&utcOffset=%2B1100&offset=0&prod=FOXTELIQ3'
+
+        result = urllib.request.urlopen(fullurl).read()
+        data = json.loads(result)
+        res = makeWebhookResult(data)
+        return res
+
+    else:
         return {}
-    baseurl = "https://query.yahooapis.com/v1/public/yql?"
-    yql_query = makeYqlQuery(req)
-    if yql_query is None:
-        return {}
-    yql_url = baseurl + urllib.parse.urlencode({'q': yql_query}) + "&format=json"
-    result = urllib.request.urlopen(yql_url).read()
-    data = json.loads(result)
-    res = makeWebhookResult(data)
-    return res
 
 
-def makeYqlQuery(req):
-    result = req.get("result")
-    parameters = result.get("parameters")
-    city = parameters.get("geo-city")
-    if city is None:
-        return None
 
-    return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
+# def makeYqlQuery(req):
+#     result = req.get("result")
+#     parameters = result.get("parameters")
+#     city = parameters.get("geo-city")
+#     if city is None:
+#         return None
+#
+#     return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
 
 
 def makeWebhookResult(data):
-    query = data.get('query')
-    if query is None:
+    hits = data.get('hits')
+    if hits is None:
         return {}
 
-    result = query.get('results')
+
+    metadata = hits.get('metadata')
     if result is None:
         return {}
 
-    channel = result.get('channel')
-    if channel is None:
+
+    title = metadata.get('title')
+    description = metadata.get('description')
+
+    if (title is None) or (description is None):
         return {}
 
-    item = channel.get('item')
-    location = channel.get('location')
-    units = channel.get('units')
-    if (location is None) or (item is None) or (units is None):
-        return {}
-
-    condition = item.get('condition')
-    if condition is None:
-        return {}
 
     # print(json.dumps(item, indent=4))
 
-    speech = "Today in " + location.get('city') + ": " + condition.get('text') + \
-             ", the temperature is " + condition.get('temp') + " " + units.get('temperature')
-
+    speech = "The hot show at the moment is " + title + "...." + description
+    
     print("Response:")
     print(speech)
 
@@ -103,4 +124,3 @@ if __name__ == '__main__':
     print("Starting app on port %d" % port)
     context = ('/etc/letsencrypt/live/iamshaw.net/fullchain.pem', '/etc/letsencrypt/live/iamshaw.net/privkey.pem')
     app.run(host='0.0.0.0', port=5000, ssl_context=context, threaded=True, debug=True)
- 
