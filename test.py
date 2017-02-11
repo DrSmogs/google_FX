@@ -15,4 +15,4 @@ from OpenSSL import SSL
 
 import disco #functions for Content Discovery
 
-disco.disco_url('trending','rid', 'fx', 'sfx', 'mlt')
+disco.disco_url('trending')
