@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 #This is to hold functions for content disco to clean the main app nice and clean
+# in particular it contains a fucntion for building the content disco query url and also for parsing
+#the results from content disco into the google format
 
 import urllib
 
@@ -179,3 +181,47 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     url=baseurl + urllib.urlencode(url_params)
 
     return url
+
+def disco_resp(action, data)
+
+    #build the results need for the web query - returns speech and display text (more later) as a dictionary
+    #uses the action to determine how to process results
+
+
+    if action=="trending":
+        hits = data.get('hits')
+        if hits is None:
+            return {}
+
+        title = hits[0]['metadata']['title']
+        description= hits[0]['metadata']['description']
+
+        speech = "The hot show at the moment is " + title + "...." + description
+        displayText = "The hot show at the moment is " + title + "...." + description
+
+
+    elif action=="trending_list":
+        hits = data.get('hits')
+        if hits is None:
+            return {}
+
+        speech = "The hottest shows are "
+
+        for show in hits:
+
+            speech = speech + show['metadata']['title'] + ", "
+
+        displayText = speech
+
+
+    else:
+        speech="oh crap, something went wrong"
+        displayText= "oh crap something went wrong"
+
+    return {
+        "speech": speech,
+        "displayText": displayText,
+        # "data": data,
+        # "contextOut": [],
+        "source": "Foxtel-Content-Disco-API"
+    }
