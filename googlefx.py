@@ -89,23 +89,17 @@ def makeWebhookResult(data):
     if hits is None:
         return {}
 
+    for item in hits:
+        for data_item in item['metadata']:
+            title = data_item['title']
+            description= data_item['desciption']
 
-    metadata = hits.get('metadata')
-    if result is None:
-        return {}
-
-
-    title = metadata.get('title')
-    description = metadata.get('description')
-
-    if (title is None) or (description is None):
-        return {}
 
 
     # print(json.dumps(item, indent=4))
 
     speech = "The hot show at the moment is " + title + "...." + description
-    
+
     print("Response:")
     print(speech)
 
