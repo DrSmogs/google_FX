@@ -10,7 +10,7 @@ import json
 import os
 
 
-def disco_url(searchtype, rid, fx, sfx, mlt):
+def disco_url(searchtype, rid=None, fx=None, sfx=None, mlt=None):
     #build the content disco url
     url_params = {}
 
@@ -90,20 +90,23 @@ def disco_url(searchtype, rid, fx, sfx, mlt):
     #1000 for +10 UTC zones. This needs to be based on the users time settings.
     #REQUIRED
 
-    url_params['fp']="" #no idea what this does
+    #url_params['fp']="" #no idea what this does
     #Specifies the fields of the result to be returned this specifies the exa
 
-
-    url_params['fx']=fx
+    if fx is not None:
+        url_params['fx']=fx
     #Asset search parameter, this is used for the base levels of search
 
-    url_params['sfx']=sfx
-     #Schedule search parameter, this is used to filter/search forspecific schedules or
+    if sfx is not None:
+        url_params['sfx']=sfx
+    #Schedule search parameter, this is used to filter/search forspecific schedules or
 
-    url_params['mlt']=mlt
+    if mlt is not None:
+        url_params['mlt']=mlt
     #YMAL parameter, this needs to be sent the programId of the show/movie that is needing to create the YMAL for
 
-    url_params['rid']=rid
+    if mlt is not None:
+        url_params['rid']=rid
     # This contains the request identifier, this identifies the function
     # that is being called: AUTO1,AUTO2,AUTO3 - autosuggest RID's
     # SEARCH1 - Base search (no rollup)
@@ -120,56 +123,56 @@ def disco_url(searchtype, rid, fx, sfx, mlt):
     #construct the base url based on search type
 
     if searchtype=="YMAL":
-        baseurl= envurl + "taps/assets/yma"
+        baseurl= envurl + "taps/assets/yma?"
         #This controls all the YMAL(You May Also Like) functionality
 
     elif searchtype=="popular":
-        baseurl=envurl + "taps/assets/popularity/popular"
+        baseurl=envurl + "taps/assets/popularity/popular?"
         #This controls all the popular searches
 
     elif searchtype=="related":
-        baseurl=envurl + "taps/assets/metadata/related"
+        baseurl=envurl + "taps/assets/metadata/related?"
         #This controls all the related functions. Currently this is the other episode functionality
 
     elif searchtype=="itemdetails":
-        baseurl=envurl + "taps/assets/metadata/itemDetails"
+        baseurl=envurl + "taps/assets/metadata/itemDetails?"
         #This controls all the item detail functionality. This will only return 1 asset per call
 
     elif searchtype=="channel":
-        baseurl=envurl + "taps/assets/metadata/channel"
+        baseurl=envurl + "taps/assets/metadata/channel?"
         #This controls all the channel functionality. Based on sent channel tags will return all results that are within schedule
 
     elif searchtype=="detaillist":
-        baseurl=envurl + "taps/assets/metadata/detailList"
+        baseurl=envurl + "taps/assets/metadata/detailList?"
         #This is similar to the item details function but will return more that 1 asset per call
 
     elif searchtype=="images":
-        baseurl=envurl + "taps/assets/metadata/images"
+        baseurl=envurl + "taps/assets/metadata/images?"
         #This controls the image functionality. Will return images for all assets requested. This is not restricted by schedule
 
     elif searchtype=="trending":
-        baseurl=envurl + "taps/assets/popularity/trending"
+        baseurl=envurl + "taps/assets/popularity/trending?"
         #This controls the trendingfunctionality. Will return the current trending data (over the entire platform) based on what is
         #available on the product
 
     elif searchtype=="suggested":
-        baseurl=envurl + "taps/assets/personalised/suggested"
+        baseurl=envurl + "taps/assets/personalised/suggested?"
         #This controls the suggested functionality. Will return suggested results based on the users sent privacy settings
 
     elif searchtype=="autosuggest":
-        baseurl=envurl + "taps/assets/search/autosugges"
+        baseurl=envurl + "taps/assets/search/autosugges?"
         #This controls the autosuggest results
 
     elif searchtype=="keyword":
-        baseurl=envurl + "taps/assets/search/keyword"
+        baseurl=envurl + "taps/assets/search/keyword?"
         #This controls the keyword search. This is search that specifies the field to match against
 
     elif searchtype=="fullsearch":
-        baseurl=envurl + "taps/assets/search/prefix"
+        baseurl=envurl + "taps/assets/search/prefix?"
         #This controls the Full search functionality. This is non-field based search
 
     elif searchtype=="events":
-        baseurl=envurl + "implicitEvents"
+        baseurl=envurl + "implicitEvents?"
         #This is where all the TVGuide Events need to be POSTed
 
     else:
