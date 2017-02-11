@@ -38,16 +38,18 @@ def webhook():
 
 
 def processRequest(req):
-    if req.get("result").get("action") == "trending":
+    action=req.get("result").get("action")
+
+    if action == "trending":
 
         queryurl = disco.disco_url('trending','1')
 
         result = urllib.request.urlopen(queryurl).read()
         data = json.loads(result)
-        res = makeWebhookResult(data)
+        res = disco.disco_resp(action,data)
         return res
 
-    elif req.get("result").get("action") == "trending_list":
+    elif action == "trending_list":
 
         print("trending_list triggered")
         limit = req.get("result").get("parameters").get("limit")
@@ -56,62 +58,12 @@ def processRequest(req):
 
         result = urllib.request.urlopen(queryurl).read()
         data = json.loads(result)
-        res = makeWebhookResult2(data)
+        res = disco.disco_resp(action,data)
         return res
 
     else:
         return {}
 
-
-
-
-def makeWebhookResult(data):
-    hits = data.get('hits')
-    if hits is None:
-        return {}
-
-    title = hits[0]['metadata']['title']
-    description= hits[0]['metadata']['description']
-
-    # print(json.dumps(item, indent=4))
-
-    speech = "The hot show at the moment is " + title + "...." + description
-
-    print("Response:")
-    print(speech)
-
-    return {
-        "speech": speech,
-        "displayText": speech,
-        # "data": data,
-        # "contextOut": [],
-        "source": "apiai-weather-webhook-sample"
-    }
-
-
-def makeWebhookResult2(data):
-    hits = data.get('hits')
-    if hits is None:
-        return {}
-   
-    speech = "The hottest shows are "
-
-    for show in hits:
-
-        speech = speech + show['metadata']['title'] + ", "
-
-
-
-    print("Response:")
-    print(speech)
-
-    return {
-        "speech": speech,
-        "displayText": speech,
-        # "data": data,
-        # "contextOut": [],
-        "source": "apiai-weather-webhook-sample"
-    }
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
