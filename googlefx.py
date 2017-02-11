@@ -94,9 +94,9 @@ def makeWebhookResult2(data):
 
     speech = "The hot shows are "
 
-    for each show in hits:
+    for show in hits:
 
-        speech = speech + hits['metadata']['title']
+        speech = speech + show['metadata']['title']
 
 
     print("Response:")
