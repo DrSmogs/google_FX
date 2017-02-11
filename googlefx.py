@@ -31,7 +31,7 @@ def webhook():
     res = processRequest(req)
 
     res = json.dumps(res, indent=4)
-    # print(res)
+    print(res)
     r = make_response(res)
     r.headers['Content-Type'] = 'application/json'
     return r
@@ -47,9 +47,11 @@ def processRequest(req):
         res = makeWebhookResult(data)
         return res
 
-    if req.get("result").get("action") == "trendin_list":
+    elif req.get("result").get("action") == "trending_list":
 
+        print("trending_list triggered")
         limit = req.get("result").get("parameters").get("limit")
+        print(limit)
         queryurl = disco.disco_url('trending',limit)
 
         result = urllib.request.urlopen(queryurl).read()
@@ -96,7 +98,8 @@ def makeWebhookResult2(data):
 
     for show in hits:
 
-        speech = speech + show['metadata']['title']
+        speech = speech + show['metadata']['title'] + ", "
+
 
 
     print("Response:")
