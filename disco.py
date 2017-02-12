@@ -20,7 +20,7 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     #Product Values:FOXTELIQ3, FOXTELTVGuide, FOXTELOnlineGuide, FOXTELGO, FOXTELGOKIDS, FOXTELPLAY
     #REQUIRED
 
-    url_params['fxid']="00d41d8cd98f00b204e9800998ecf8427ed41d8cd98f00b204e9800998ecf8427e" #default provided by Jason
+    url_params['fxid']="00d41d8cd98f00b204e9800998ecf8427ed41d8cd98f00b204e9800998ecf8427e" #supplied by jason
     #This is the user id which is a concatination of IDM + AID + LID
     #REQUIRE
 
@@ -33,7 +33,7 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     # FXID=00.. etc is expected.
     #REQUIRED
 
-    url_params['aid']="d41d8cd98f00b204e9800998ecf8427e" #Provided by Jason
+    url_params['aid']="d41d8cd98f00b204e9800998ecf8427ecfcd208495d565ef66e7dff9f98764da" #supplied by Jason
     #This is a hashed value of the account Id (MD5)
     #REQUIRED
 
@@ -183,7 +183,7 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     else:
         baseurl=""
 
-    url=baseurl + urllib.urlencode(url_params)+"fx="+fx
+    url=baseurl + urllib.urlencode(url_params)+"&fx="+fx
 
     return url
 
