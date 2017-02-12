@@ -10,17 +10,17 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     #build the content disco url
     url_params = {}
 
-    envurl = "https://foxtel-prod-elb.digitalsmiths.net/sd/foxtel/"
+    envurl = "https://foxtel-prod-admin-0.digitalsmiths.net/sd/temp-foxtel/"
     #this is the main url to use - i am using production one
 
     #below are parameters for the search which will be hard coded and not required to change with function
     #at least for now.....
 
-    url_params['prod']="FOXTELIQ3"
+    url_params['prod']="FOXTELTVGuide"
     #Product Values:FOXTELIQ3, FOXTELTVGuide, FOXTELOnlineGuide, FOXTELGO, FOXTELGOKIDS, FOXTELPLAY
     #REQUIRED
 
-    url_params['fxid']="00" #default value for no user
+    url_params['fxid']="00d41d8cd98f00b204e9800998ecf8427ed41d8cd98f00b204e9800998ecf8427e" #default provided by Jason
     #This is the user id which is a concatination of IDM + AID + LID
     #REQUIRE
 
@@ -33,11 +33,11 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     # FXID=00.. etc is expected.
     #REQUIRED
 
-    url_params['aid']="cfcd208495d565ef66e7dff9f98764da" #md5 hash value of '0'
+    url_params['aid']="d41d8cd98f00b204e9800998ecf8427e" #Provided by Jason
     #This is a hashed value of the account Id (MD5)
     #REQUIRED
 
-    url_params['hwid']="cfcd208495d565ef66e7dff9f98764da" #md5 hash value of '0'
+    url_params['hwid']="d41d8cd98f00b204e9800998ecf8427e" #Provided by Jason
     #This is a hashed value of the hardware Id. If not available per installation UUID is required
     #REQUIRED
 
@@ -46,7 +46,7 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     #MODEL IDENTIFIER may also include a dash if this helps but must be consistent.
     #REQUIRED
 
-    url_params['dclass']=""
+    url_params['dclass']="TERMINAL"
     #An agreed generic name for the product grouping. IE. PHONE, TABLET, BROWSER etc..
     #REQUIRED
 
@@ -94,7 +94,7 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     #Limits the number of results
 
     if fx is None:
-        fx= ("metadata.title,metadata.episodeTitle,metadata.seasonNumber,metadata.episodeNumber,metadata.classification," 
+        fx= ("metadata.title,metadata.episodeTitle,metadata.seasonNumber,metadata.episodeNumber,metadata.classification,"
         "metadata.genreName,metadata.subGenreName,metadata.titleId,metadata.shortSynopsis,metadata.category,"
         "metadaa.publishDuration,images.default,relevantSchedules.eventTitle,relevantSchedules.type,"
         "relevantSchedules.isPremiere,relevantSchedules.startTime,relevantSchedules.endTime,"
