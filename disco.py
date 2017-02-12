@@ -94,12 +94,12 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     #Limits the number of results
 
     if fx is None:
-        fx= "metadata.title,metadata.episodeTitle,metadata.seasonNumber,metadata.episodeNumber,metadata.classification," +
-        "metadata.genreName,metadata.subGenreName,metadata.titleId,metadata.shortSynopsis,metadata.category," +
-        "metadata.publishDuration,images.default,relevantSchedules.eventTitle,relevantSchedules.type," +
-        "relevantSchedules.isPremiere,relevantSchedules.startTime,relevantSchedules.endTime,"+
-        "relevantSchedules.isNewSeries,relevantSchedules.sourceChannel,relevantSchedules.audioType," +
-        "relevantSchedules.isLiveEvent,relevantSchedules.channelTag"
+        fx= ("metadata.title,metadata.episodeTitle,metadata.seasonNumber,metadata.episodeNumber,metadata.classification," 
+        "metadata.genreName,metadata.subGenreName,metadata.titleId,metadata.shortSynopsis,metadata.category,"
+        "metadaa.publishDuration,images.default,relevantSchedules.eventTitle,relevantSchedules.type,"
+        "relevantSchedules.isPremiere,relevantSchedules.startTime,relevantSchedules.endTime,"
+        "relevantSchedules.isNewSeries,relevantSchedules.sourceChannel,relevantSchedules.audioType,"
+        "relevantSchedules.isLiveEvent,relevantSchedules.channelTag")
     #Asset search parameter, this is used for the base levels of search
 
     if sfx is not None:
