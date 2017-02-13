@@ -11,13 +11,13 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     #build the content disco url
     url_params = {}
 
-    envurl = "https://foxtel-prod-elb.digitalsmiths.net/sd/temp-foxtel/"
+    envurl = "https://foxtel-prod-admin-0.digitalsmiths.net/sd/temp-foxtel/"
     #this is the main url to use - i am using production one
 
     #below are parameters for the search which will be hard coded and not required to change with function
     #at least for now.....
 
-    url_params['prod']="FOXTELTVGuide"
+    url_params['prod']="FOXTELIQ3"
     #Product Values:FOXTELIQ3, FOXTELTVGuide, FOXTELOnlineGuide, FOXTELGO, FOXTELGOKIDS, FOXTELPLAY
     #REQUIRED
 
@@ -165,7 +165,7 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
         #This controls the suggested functionality. Will return suggested results based on the users sent privacy settings
 
     elif searchtype=="autosuggest":
-        baseurl=envurl + "taps/assets/search/autosugges?"
+        baseurl=envurl + "taps/assets/search/autosuggest?"
         #This controls the autosuggest results
 
     elif searchtype=="keyword":
@@ -174,6 +174,10 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
 
     elif searchtype=="fullsearch":
         baseurl=envurl + "taps/assets/search/prefix?"
+        #This controls the Full search functionality. This is non-field based search
+
+    elif searchtype=="basic":
+        baseurl=envurl + "taps/assets/search/basic?"
         #This controls the Full search functionality. This is non-field based search
 
     elif searchtype=="events":
@@ -200,8 +204,8 @@ def disco_resp(action, data):
 
         title = hits[0]['metadata']['title']
         description= hits[0]['metadata']['description']
-	starttime = datetime.datetime.fromtimestamp((hits[0]['relevantSchedules'][0]['startTime'])/1000).strftime('%I:%M %p')
-        speech = "The hot show at the moment is " + title + "...." + description + ".. it started at " + starttime 
+	#starttime = datetime.datetime.fromtimestamp((hits[0]['relevantSchedules'][0]['startTime'])/1000).strftime('%I:%M %p')
+        speech = "The hot show at the moment is " + title + "...." + description #+ ".. it started at " + starttime 
         displayText = "The hot show at the moment is " + title + "...." + description
 
 
