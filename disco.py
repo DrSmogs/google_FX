@@ -5,12 +5,13 @@
 #the results from content disco into the google format
 
 import urllib
+import datetime
 
 def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     #build the content disco url
     url_params = {}
 
-    envurl = "https://foxtel-prod-admin-0.digitalsmiths.net/sd/temp-foxtel/"
+    envurl = "https://foxtel-prod-elb.digitalsmiths.net/sd/temp-foxtel/"
     #this is the main url to use - i am using production one
 
     #below are parameters for the search which will be hard coded and not required to change with function
@@ -54,7 +55,7 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     #Version of the client side software
     #REQUIRED
 
-    url_params['dpg']="R18+"
+    url_params['dpg']="R"
     #Parental setting of the customer facing application or device.
     #Provided to allow results to be filtered against this value. The default sent needs to be the maximum value (R18+)
     #REQUIRED
@@ -81,7 +82,7 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     #app has a requirement to remember local terrestrial channels for not logged in users.
     #REQUIRED
 
-    url_params['utcOffset']="+1100" #hardcoded to +11.. but need to have this chage later from google device
+    url_params['utcOffset']="+1000" #hardcoded to +11.. but need to have this chage later from google device
     #This is a 4 character representation of the current offset. i.e.
     #1000 for +10 UTC zones. This needs to be based on the users time settings.
     #REQUIRED
@@ -96,10 +97,9 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     if fx is None:
         fx= ("metadata.title,metadata.episodeTitle,metadata.seasonNumber,metadata.episodeNumber,metadata.classification,"
         "metadata.genreName,metadata.subGenreName,metadata.titleId,metadata.shortSynopsis,metadata.category,"
-        "metadaa.publishDuration,images.default,relevantSchedules.eventTitle,relevantSchedules.type,"
-        "relevantSchedules.isPremiere,relevantSchedules.startTime,relevantSchedules.endTime,"
-        "relevantSchedules.isNewSeries,relevantSchedules.sourceChannel,relevantSchedules.audioType,"
-        "relevantSchedules.isLiveEvent,relevantSchedules.channelTag")
+        "metadaa.publishDuration,relevantSchedules.eventTitle,relevantSchedules.type,"
+        "relevantSchedules.startTime,relevantSchedules.endTime,relevantSchedules.sourceChannel")
+
     #Asset search parameter, this is used for the base levels of search
 
     if sfx is not None:
@@ -200,8 +200,8 @@ def disco_resp(action, data):
 
         title = hits[0]['metadata']['title']
         description= hits[0]['metadata']['description']
-
-        speech = "The hot show at the moment is " + title + "...." + description
+	starttime = datetime.datetime.fromtimestamp((hits[0]['relevantSchedules'][0]['startTime'])/1000).strftime('%I:%M %p')
+        speech = "The hot show at the moment is " + title + "...." + description + ".. it started at " + starttime 
         displayText = "The hot show at the moment is " + title + "...." + description
 
 
