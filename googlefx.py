@@ -69,5 +69,6 @@ if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
 
     print("Starting app on port %d" % port)
-    context = ('/etc/letsencrypt/live/iamshaw.net/fullchain.pem', '/etc/letsencrypt/live/iamshaw.net/privkey.pem')
-    app.run(host='0.0.0.0', port=5000, ssl_context=context, threaded=True, debug=True)
+    #context = ('/etc/letsencrypt/live/iamshaw.net/fullchain.pem', '/etc/letsencrypt/live/iamshaw.net/privkey.pem')
+    #app.run(host='0.0.0.0', port=5000, ssl_context=context, threaded=True, debug=True)
+    app.run(host='0.0.0.0',port=5000)
