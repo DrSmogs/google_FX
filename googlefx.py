@@ -101,6 +101,13 @@ def processRequest(req):
         data = xmpp.get_current()
         res = stu.iq3_resp(action,data)
         return res
+    # change to the channel number
+    elif action == "change_channel":
+
+        channel = req.get("result").get("parameters").get("channel")
+        data = xmpp.set_chan(channel)
+        res = stu.iq3_resp(action,data)
+        return res
 
 
     else:
