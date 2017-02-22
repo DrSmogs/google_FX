@@ -1,6 +1,8 @@
 #private documents i dont want published to git
 content_disco.pdf
 
+#actual config file - rename the template from config-blank.py to config.py
+config.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
