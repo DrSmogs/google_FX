@@ -74,6 +74,7 @@ def google():
 def processRequest(req):
     action=req.get("result").get("action")
 
+    # Return the title and synopsys of top trending show
     if action == "trending":
 
         queryurl = disco.disco_url('trending','1')
@@ -83,17 +84,24 @@ def processRequest(req):
         res = disco.disco_resp(action,data)
         return res
 
+    # Return the titles of X trending shows in order
     elif action == "trending_list":
 
-        print("trending_list triggered")
         limit = req.get("result").get("parameters").get("limit")
-        print(limit)
         queryurl = disco.disco_url('trending',limit)
 
         result = urlopen(queryurl).read().decode('utf8')
         data = json.loads(result)
         res = disco.disco_resp(action,data)
         return res
+
+    # Return the current title and synopsys of what is being viewed
+    elif action == "current_viewing":
+
+        data = xmpp.get_current()
+        res = stu.iq3_resp(action,data)
+        return res
+
 
     else:
         return {}

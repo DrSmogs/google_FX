@@ -87,7 +87,7 @@ def iq3_resp(action, data):
     #uses the action to determine how to process results
 
 
-    if action=="currentviewing":
+    if action=="current_viewing":
 
 
         if data['error'] is None:
