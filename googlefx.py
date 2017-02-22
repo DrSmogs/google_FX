@@ -11,7 +11,7 @@ from flask import Flask
 from flask import request
 from flask import make_response
 
-from OpenSSL import SSL
+#from OpenSSL import SSL #not needed when running on a socket
 
 import disco #functions for Content Discovery
 
