@@ -4,8 +4,10 @@
 # in particular it contains a fucntion for building the content disco query url and also for parsing
 #the results from content disco into the google format
 
-import urllib
 import datetime
+from urllib.parse import urlparse, urlencode
+from urllib.request import urlopen, Request
+from urllib.error import HTTPError
 
 def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     #build the content disco url
@@ -187,7 +189,7 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     else:
         baseurl=""
 
-    url=baseurl + urllib.urlencode(url_params)+"&fx="+fx
+    url=baseurl + urlencode(url_params)+"&fx="+fx
 
     return url
 
@@ -205,7 +207,7 @@ def disco_resp(action, data):
         title = hits[0]['metadata']['title']
         description= hits[0]['metadata']['description']
 	#starttime = datetime.datetime.fromtimestamp((hits[0]['relevantSchedules'][0]['startTime'])/1000).strftime('%I:%M %p')
-        speech = "The hot show at the moment is " + title + "...." + description #+ ".. it started at " + starttime 
+        speech = "The hot show at the moment is " + title + "...." + description #+ ".. it started at " + starttime
         displayText = "The hot show at the moment is " + title + "...." + description
 
 

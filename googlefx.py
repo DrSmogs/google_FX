@@ -2,27 +2,61 @@
 
 from __future__ import print_function
 from future import standard_library
+
+
 standard_library.install_aliases()
-import urllib.request, urllib.parse, urllib.error
+
+from urllib.parse import urlparse, urlencode
+from urllib.request import urlopen, Request
+from urllib.error import HTTPError
+
 import json
 import os
+import sys
+import getpass
+import socket
 
-from flask import Flask
-from flask import request
-from flask import make_response
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
-#from OpenSSL import SSL #not needed when running on a socket
+#xmpp stuff
+from sleekxmpp import Iq, ClientXMPP
+from sleekxmpp.xmlstream import ElementBase, register_stanza_plugin, ET
+from sleekxmpp.exceptions import IqError, IqTimeout
 
-import disco #functions for Content Discovery
+import sleekxmpp
+import iq3 #custom stanza stuff for iQ3 unit
+import stu #class and functions for sending iQ3 commands and processing responses
+
+from flask import Flask, request, make_response, render_template #API stuff
+
+from config import config # config file for app - make sure you rename config-blank.py and fill out values
+
+import disco # functions for Content Discovery
+
+# little big of stuff to make it work on both python versions
+if sys.version_info < (3, 0):
+    from sleekxmpp.util.misc_ops import setdefaultencoding
+    setdefaultencoding('utf8')
+else:
+    raw_input = input
 
 # Flask app should start in global layout
 app = Flask(__name__)
 
-#setup a few deaults for using the Content Disco API
+# setup the xmpp connection for controlling the iQ3
+xmpp = stu.iq3_cmd(config.loginjid, config.loginpw, config.tojid, config.resource)
+xmpp.register_plugin('xep_0030') # Service Discovery
+xmpp.register_plugin('xep_0004') # Data Forms
+xmpp.register_plugin('xep_0060') # PubSub
+xmpp.register_plugin('xep_0199') # XMPP Ping
+xmpp.register_plugin('iq3', module=iq3) # custom iQ3 stanza plugin
 
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
+
+#main API endpoint for google home
+@app.route('/google', methods=['POST'])
+def google():
     req = request.get_json(silent=True, force=True)
 
     print("Request:")
@@ -44,7 +78,7 @@ def processRequest(req):
 
         queryurl = disco.disco_url('trending','1')
 
-        result = urllib.request.urlopen(queryurl).read()
+        result = urlopen(queryurl).read().decode('utf8')
         data = json.loads(result)
         res = disco.disco_resp(action,data)
         return res
@@ -56,7 +90,7 @@ def processRequest(req):
         print(limit)
         queryurl = disco.disco_url('trending',limit)
 
-        result = urllib.request.urlopen(queryurl).read()
+        result = urlopen(queryurl).read().decode('utf8')
         data = json.loads(result)
         res = disco.disco_resp(action,data)
         return res
@@ -64,11 +98,18 @@ def processRequest(req):
     else:
         return {}
 
+# once xmpp client is connected - send presence and roster as expected
+def session_start(e):
+    xmpp.get_roster()
+    xmpp.send_presence()
+
+
+xmpp.add_event_handler('session_start', session_start) # xmpp session start handler
 
 if __name__ == '__main__':
-    port = int(os.getenv('PORT', 5000))
+    xmpp.connect() # connect to xmpp server
+    xmpp.process(block=False) #process xmpp stuff
 
+    port = int(os.getenv('PORT', 5000))
     print("Starting app on port %d" % port)
-    #context = ('/etc/letsencrypt/live/iamshaw.net/fullchain.pem', '/etc/letsencrypt/live/iamshaw.net/privkey.pem')
-    #app.run(host='0.0.0.0', port=5000, ssl_context=context, threaded=True, debug=True)
     app.run(host='0.0.0.0',port=5000)
