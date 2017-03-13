@@ -196,50 +196,70 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
 
     return url
 
-def disco_resp(action, data):
+def disco_resp(action, data,param=None):
 
     #build the results need for the web query - returns speech and display text (more later) as a dictionary
     #uses the action to determine how to process results
 
 
-    if action=="trending":
-        hits = data.get('hits')
-        if hits is None:
-            return {}
 
-        title = hits[0]['metadata']['title']
-        description= hits[0]['metadata']['description']
-	#starttime = datetime.datetime.fromtimestamp((hits[0]['relevantSchedules'][0]['startTime'])/1000).strftime('%I:%M %p')
-        speech = "The hot show at the moment is " + title + "...." + description #+ ".. it started at " + starttime
-        displayText = "The hot show at the moment is " + title + "...." + description
+    if action=="trending":
+
+        if data.get('hitCount') == 0:
+            speech = "Sorry, but i got no results for what's trending"
+            displayText = speech
+
+        else:
+
+            hits = data.get('hits')
+            if hits is None:
+                return {}
+
+            title = hits[0]['metadata']['title']
+            description= hits[0]['metadata']['description']
+            speech = "The hot show at the moment is " + title + "...." + description #+ ".. it started at " + starttime
+            displayText = speech
 
 
     elif action=="trending_list":
-        hits = data.get('hits')
-        if hits is None:
-            return {}
+        if data.get('hitCount') == 0:
+            speech = "Sorry, but i got no results for what's trending"
+            displayText = speech
 
-        speech = "The hottest shows are "
+        else:
+            hits = data.get('hits')
+            if hits is None:
+                return {}
 
-        for show in hits:
+            speech = "The hottest shows are "
 
-            speech = speech + show['metadata']['title'] + ", "
+            for show in hits:
 
-        displayText = speech
+                speech = speech + show['metadata']['title'] + ", "
+
+            displayText = speech
 
 
     elif action=="search":
-        hits = data.get('hits')
-        if hits is None:
-            return {}
 
-        title = hits[0]['metadata']['title']
-        description= hits[0]['metadata']['description']
-        starttime = datetime.datetime.fromtimestamp((hits[0]['relevantSchedules'][0]['startTime'])/1000).strftime('%A %d %I:%M %p')
-        endtime = datetime.datetime.fromtimestamp((hits[0]['relevantSchedules'][0]['endTime'])/1000).strftime('%I:%M %p')
-        channel = hits[0]['relevantSchedules'][0]['sourceChannel']
-        speech = title + " starts on " + starttime + " and ends at " + endtime + " on " + channel + ". This is the one where " + description
-        displayText = speech
+        if data.get('hitCount') == 0:
+            speech = "Sorry, but i couldnt find " + param
+            displayText = speech
+
+        else:
+
+
+            hits = data.get('hits')
+            if hits is None:
+                return {}
+
+            title = hits[0]['metadata']['title']
+            description= hits[0]['metadata']['description']
+            starttime = datetime.datetime.fromtimestamp((hits[0]['relevantSchedules'][0]['startTime'])/1000).strftime('%A %d %I:%M %p')
+            endtime = datetime.datetime.fromtimestamp((hits[0]['relevantSchedules'][0]['endTime'])/1000).strftime('%I:%M %p')
+            channel = hits[0]['relevantSchedules'][0]['sourceChannel']
+            speech = title + " starts on " + starttime + " and ends at " + endtime + " on " + channel + ". This is the one where " + description
+            displayText = speech
 
 
     else:

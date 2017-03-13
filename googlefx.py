@@ -116,7 +116,7 @@ def processRequest(req):
 
         result = urlopen(queryurl).read().decode('utf8')
         data = json.loads(result)
-        res = disco.disco_resp(action,data)
+        res = disco.disco_resp(action,data,search)
         return res
 
 
