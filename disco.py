@@ -84,7 +84,7 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     #app has a requirement to remember local terrestrial channels for not logged in users.
     #REQUIRED
 
-    url_params['utcOffset']="+1100" #hardcoded to +11.. but need to have this chage later from google device
+    url_params['utcOffset']="+1000" #hardcoded to +11.. but need to have this chage later from google device
     #This is a 4 character representation of the current offset. i.e.
     #1000 for +10 UTC zones. This needs to be based on the users time settings.
     #REQUIRED
