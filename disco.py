@@ -254,7 +254,7 @@ def disco_resp(action, data,param=None):
                 return {}
 
             title = hits[0]['metadata']['title']
-            description= hits[0]['metadata']['description']
+            description= hits[0]['metadata']['shortSynopsis']
             starttime = datetime.datetime.fromtimestamp((hits[0]['relevantSchedules'][0]['startTime'])/1000).strftime('%A %d %I:%M %p')
             endtime = datetime.datetime.fromtimestamp((hits[0]['relevantSchedules'][0]['endTime'])/1000).strftime('%I:%M %p')
             channel = hits[0]['relevantSchedules'][0]['sourceChannel']
