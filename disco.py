@@ -216,7 +216,7 @@ def disco_resp(action, data,param=None):
                 return {}
 
             title = hits[0]['metadata']['title']
-            description= hits[0]['metadata']['shortSynopsis']
+            description= hits[0]['metadata']['description']
             speech = "The hot show at the moment is " + title + "...." + description #+ ".. it started at " + starttime
             displayText = speech
 
