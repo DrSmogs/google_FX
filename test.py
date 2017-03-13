@@ -11,8 +11,7 @@ from flask import Flask
 from flask import request
 from flask import make_response
 
-from OpenSSL import SSL
 
 import disco #functions for Content Discovery
 
-disco.disco_url('trending')
+print(disco.disco_url('basic',limit=1, rid='SEARCH1', fx='the simpsons', sfx='type:LINEAR', mlt=None))

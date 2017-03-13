@@ -109,6 +109,18 @@ def processRequest(req):
         res = stu.iq3_resp(action,data)
         return res
 
+    elif action == "search":
+
+        search = req.get("result").get("parameters").get("search")
+        queryurl = disco.disco_url('basic',limit=1, rid='SEARCH1', fx=search, sfx='type:LINEAR', mlt=None)
+
+        result = urlopen(queryurl).read().decode('utf8')
+        data = json.loads(result)
+        res = disco.disco_resp(action,data)
+        return res
+
+
+
 
     else:
         return {}

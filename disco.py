@@ -97,10 +97,13 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     #Limits the number of results
 
     if fx is None:
-        fx= ("metadata.title,metadata.episodeTitle,metadata.seasonNumber,metadata.episodeNumber,metadata.classification,"
+        url_params['fx']= ("metadata.title,metadata.episodeTitle,metadata.seasonNumber,metadata.episodeNumber,metadata.classification,"
         "metadata.genreName,metadata.subGenreName,metadata.titleId,metadata.shortSynopsis,metadata.category,"
         "metadaa.publishDuration,relevantSchedules.eventTitle,relevantSchedules.type,"
         "relevantSchedules.startTime,relevantSchedules.endTime,relevantSchedules.sourceChannel")
+
+    else:
+        url_params['fx']=fx
 
     #Asset search parameter, this is used for the base levels of search
 
@@ -112,7 +115,7 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
         url_params['mlt']=mlt
     #YMAL parameter, this needs to be sent the programId of the show/movie that is needing to create the YMAL for
 
-    if mlt is not None:
+    if rid is not None:
         url_params['rid']=rid
     # This contains the request identifier, this identifies the function
     # that is being called: AUTO1,AUTO2,AUTO3 - autosuggest RID's
@@ -189,7 +192,7 @@ def disco_url(searchtype, limit=None, rid=None, fx=None, sfx=None, mlt=None):
     else:
         baseurl=""
 
-    url=baseurl + urlencode(url_params)+"&fx="+fx
+    url=baseurl + urlencode(url_params) #+"&fx="+fx
 
     return url
 
@@ -222,6 +225,20 @@ def disco_resp(action, data):
 
             speech = speech + show['metadata']['title'] + ", "
 
+        displayText = speech
+
+
+    elif action=="search":
+        hits = data.get('hits')
+        if hits is None:
+            return {}
+
+        title = hits[0]['metadata']['title']
+        description= hits[0]['metadata']['description']
+        starttime = datetime.datetime.fromtimestamp((hits[0]['relevantSchedules'][0]['startTime'])/1000).strftime('%A %d %I:%M %p')
+        endtime = datetime.datetime.fromtimestamp((hits[0]['relevantSchedules'][0]['endTime'])/1000).strftime('%I:%M %p')
+        channel = hits[0]['relevantSchedules'][0]['sourceChannel']
+        speech = title + " starts on " + starttime + " and ends at " + endtime + " on " + channel + ". This is the one where " + description
         displayText = speech
 
 
